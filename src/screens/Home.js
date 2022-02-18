@@ -1,9 +1,28 @@
 // Librairies
-import React, {useEffect} from 'react';
-import {StyleSheet, Text, View, PermissionsAndroid, Button} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  PermissionsAndroid,
+  ActivityIndicator,
+} from 'react-native';
 import GetLocation from 'react-native-get-location';
+import axios from 'axios';
+
+// API KEY
+let apiKey = process.env.REACT_APP_API_KEY;
+
+// API
+const API_URL = (lat, lon) =>
+  `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=fr&units=metric`;
 
 export default function Home() {
+  // States
+  const [userLocation, setUserLocation] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+
   useEffect(() => {
     // Demander la permission pour avoir accès à la localisation
     const requestLocationPermission = async permission => {
@@ -23,12 +42,12 @@ export default function Home() {
           console.log('You can use the location');
         } else {
           console.log('Location permission denied');
-          console.log(granted);
         }
       } catch (err) {
         console.warn(err);
       }
     };
+    requestLocationPermission();
 
     // Récupérer la localisation
     GetLocation.getCurrentPosition({
@@ -36,7 +55,7 @@ export default function Home() {
       timeout: 15000,
     })
       .then(location => {
-        console.log(location);
+        getWeather(location);
       })
       .catch(error => {
         const {code, message} = error;
@@ -44,9 +63,38 @@ export default function Home() {
       });
   }, []);
 
+  // Requête au serveur
+  const getWeather = async location => {
+    try {
+      const response = await axios.get(
+        API_URL(location.latitude, location.longitude),
+      );
+      setData(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Afficher un chargement puis la météo
+  // const displayedWeather = () => {
+  //   if (isLoading) {
+  //     return (
+  //       <View style={styles.container}>
+  //         <ActivityIndicator />
+  //       </View>
+  //     );
+  //   } else {
+  //     <View style={styles.container}>
+  //       <Text>{data && data.city.name}</Text>
+  //     </View>;
+  //   }
+  // };
+  console.log(data);
+
   return (
     <View style={styles.container}>
-      <Text>Test</Text>
+      <Text>{data}</Text>
     </View>
   );
 }
