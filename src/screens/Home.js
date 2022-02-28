@@ -9,9 +9,10 @@ import {
 } from 'react-native';
 import GetLocation from 'react-native-get-location';
 import axios from 'axios';
+import {API_KEY} from '@env';
 
 // API KEY
-let apiKey = process.env.REACT_APP_API_KEY;
+let apiKey = API_KEY;
 
 // API
 const API_URL = (lat, lon) =>
@@ -77,24 +78,25 @@ export default function Home() {
   };
 
   // Afficher un chargement puis la météo
-  // const displayedWeather = () => {
-  //   if (isLoading) {
-  //     return (
-  //       <View style={styles.container}>
-  //         <ActivityIndicator />
-  //       </View>
-  //     );
-  //   } else {
-  //     <View style={styles.container}>
-  //       <Text>{data && data.city.name}</Text>
-  //     </View>;
-  //   }
-  // };
-  console.log(data);
+  const displayedWeather = () => {
+    if (isLoading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>{data && data.city.name}</Text>
+        </View>
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text>{data}</Text>
+      <Text>{displayedWeather()}</Text>
     </View>
   );
 }
