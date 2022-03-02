@@ -80,23 +80,22 @@ export default function Home() {
   // Afficher un chargement puis la météo
   const displayedWeather = () => {
     if (isLoading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator />
-        </View>
-      );
+      return <ActivityIndicator />;
     } else {
       return (
-        <View style={styles.container}>
-          <Text>{data && data.city.name}</Text>
+        <View>
+          <Text style={styles.city}>{data && data.city.name}</Text>
         </View>
       );
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text>{displayedWeather()}</Text>
+    <View>
+      {displayedWeather()}
+      <Text style={styles.day}>Aujourd'hui</Text>
+      <Text style={styles.temperature}>17°C</Text>
+      <Text style={styles.weather}>Nuageux</Text>
     </View>
   );
 }
@@ -104,13 +103,25 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: '#ecf0f1',
-    padding: 8,
   },
-  item: {
-    margin: 24,
-    fontSize: 18,
+  city: {
+    fontSize: 27,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 27,
+  },
+  day: {
+    fontSize: 22,
+    textAlign: 'center',
+  },
+  temperature: {
+    fontSize: 77,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  weather: {
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
   },
