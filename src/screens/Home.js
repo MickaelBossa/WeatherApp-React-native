@@ -11,6 +11,9 @@ import GetLocation from 'react-native-get-location';
 import axios from 'axios';
 import {API_KEY} from '@env';
 
+// Composants
+import WeatherThreeHours from '../components/WeatherThreeHours';
+
 // API KEY
 let apiKey = API_KEY;
 
@@ -91,11 +94,12 @@ export default function Home() {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       {displayedWeather()}
       <Text style={styles.day}>Aujourd'hui</Text>
       <Text style={styles.temperature}>17°C</Text>
       <Text style={styles.weather}>Nuageux</Text>
+      <WeatherThreeHours />
     </View>
   );
 }
